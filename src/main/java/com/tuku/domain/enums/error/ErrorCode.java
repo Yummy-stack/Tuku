@@ -1,4 +1,4 @@
-package com.tuku.model.enums.error;
+package com.tuku.domain.enums.error;
 
 import lombok.Getter;
 

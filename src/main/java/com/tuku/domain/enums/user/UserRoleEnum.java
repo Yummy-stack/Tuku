@@ -1,4 +1,4 @@
-package com.tuku.model.enums.user;
+package com.tuku.domain.enums.user;
 
 import cn.hutool.core.util.ObjUtil;
 import lombok.Getter;

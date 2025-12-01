@@ -1,6 +1,6 @@
 package com.tuku.common;
 
-import com.tuku.model.enums.error.ErrorCode;
+import com.tuku.domain.enums.error.ErrorCode;
 import lombok.Data;
 
 import java.io.Serializable;

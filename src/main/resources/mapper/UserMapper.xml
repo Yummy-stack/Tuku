@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tuku.mapper.UserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.tuku.domain.pojo.user.User">
+        <id column="id" property="id" />
+        <result column="userAccount" property="userAccount" />
+        <result column="userPassword" property="userPassword" />
+        <result column="userName" property="userName" />
+        <result column="userAvatar" property="userAvatar" />
+        <result column="userProfile" property="userProfile" />
+        <result column="userRole" property="userRole" />
+        <result column="vipExpireTime" property="vipExpireTime" />
+        <result column="vipCode" property="vipCode" />
+        <result column="vipNumber" property="vipNumber" />
+        <result column="shareCode" property="shareCode" />
+        <result column="inviteUser" property="inviteUser" />
+        <result column="editTime" property="editTime" />
+        <result column="createTime" property="createTime" />
+        <result column="updateTime" property="updateTime" />
+        <result column="isDelete" property="isDelete" />
+    </resultMap>
+
+</mapper>

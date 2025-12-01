@@ -1,6 +1,6 @@
 package com.tuku.exception;
 
-import com.tuku.model.enums.error.ErrorCode;
+import com.tuku.domain.enums.error.ErrorCode;
 import lombok.Getter;
 
 @Getter

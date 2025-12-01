@@ -23,7 +23,7 @@ springdoc:
   group-configs:
     - group: 'default'
       paths-to-match: '/**'
-      packages-to-scan: com.heima.yunaigenerator.controller
+      packages-to-scan: com.tuku.controller
 
 mybatis-plus:
   configuration:

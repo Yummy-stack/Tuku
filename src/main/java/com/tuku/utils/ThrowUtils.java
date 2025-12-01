@@ -2,7 +2,7 @@ package com.tuku.utils;
 
 
 import com.tuku.exception.BusinessException;
-import com.tuku.model.enums.error.ErrorCode;
+import com.tuku.domain.enums.error.ErrorCode;
 
 public class ThrowUtils {
 
