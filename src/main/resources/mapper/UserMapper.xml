@@ -3,7 +3,7 @@
 <mapper namespace="com.tuku.mapper.UserMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.tuku.domain.pojo.user.User">
+    <resultMap id="BaseResultMap" type="com.tuku.model.entity.user.User">
         <id column="id" property="id" />
         <result column="userAccount" property="userAccount" />
         <result column="userPassword" property="userPassword" />

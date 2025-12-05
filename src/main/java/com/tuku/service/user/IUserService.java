@@ -2,11 +2,12 @@ package com.tuku.service.user;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 
-import com.tuku.domain.dto.user.UserLoginDto;
-import com.tuku.domain.dto.user.UserRegisterDto;
-import com.tuku.domain.pojo.user.User;
-import com.tuku.domain.vo.LoginUserVo;
+import com.tuku.model.dto.user.*;
+import com.tuku.model.entity.user.User;
+import com.tuku.model.vo.LoginUserVo;
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.util.List;
 
 /**
  * <p>
@@ -30,5 +31,13 @@ public interface IUserService extends IService<User> {
     //获取当前登录用户信息
     LoginUserVo getLoginUser(HttpServletRequest httpServletRequest);
     //获取其他用户信息
-
+    LoginUserVo getAnotherLoginUser(Long userId);
+    //管理员添加用户
+    boolean userAdd(UserAddDto userAddDto);
+    //管理员更新用户
+    boolean userUpdate(UserUpdateDto userUpdateDto);
+    //管理员查询用户
+    List<User> userQuery(UserQueryDto userQueryDto);
+    //管理员查询详细用户信息
+    User userInformation(Long userId);
 }

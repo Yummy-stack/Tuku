@@ -1,9 +1,9 @@
 package com.tuku.aop.user;
 
 import com.tuku.annotation.AuthCheck;
-import com.tuku.domain.enums.error.ErrorCode;
-import com.tuku.domain.enums.user.UserRoleEnum;
-import com.tuku.domain.vo.LoginUserVo;
+import com.tuku.model.enums.error.ErrorCode;
+import com.tuku.model.enums.user.UserRoleEnum;
+import com.tuku.model.vo.LoginUserVo;
 import com.tuku.service.user.IUserService;
 import com.tuku.utils.ThrowUtils;
 import jakarta.annotation.Resource;
@@ -13,7 +13,6 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 

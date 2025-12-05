@@ -1,11 +1,13 @@
 package com.tuku.controller.user;
 
 
+import com.tuku.annotation.AuthCheck;
 import com.tuku.common.BaseResponse;
-import com.tuku.domain.dto.user.UserLoginDto;
-import com.tuku.domain.dto.user.UserRegisterDto;
-import com.tuku.domain.enums.error.ErrorCode;
-import com.tuku.domain.vo.LoginUserVo;
+import com.tuku.model.dto.user.UserAddDto;
+import com.tuku.model.dto.user.UserLoginDto;
+import com.tuku.model.dto.user.UserRegisterDto;
+import com.tuku.model.enums.error.ErrorCode;
+import com.tuku.model.vo.LoginUserVo;
 import com.tuku.service.user.IUserService;
 import com.tuku.utils.ResultUtils;
 import com.tuku.utils.ThrowUtils;
@@ -15,6 +17,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import static com.tuku.constant.user.UserRoleConstant.ADMIN_ROLE;
 
 @RestController
 @RequestMapping("/user")
@@ -65,4 +69,16 @@ public class UserController {
         boolean userLogoutResult = userService.userLogout(httpServletRequest);
         return ResultUtils.success(userLogoutResult);
     }
+
+    @ApiOperation(value = "管理员添加用户")
+    @PostMapping("/add")
+    @AuthCheck(mustRole = ADMIN_ROLE)
+    BaseResponse<Boolean> userAdd(UserAddDto userAddDto) {
+        ThrowUtils.throwIf(userAddDto == null,ErrorCode.PARAMS_ERROR,"参数为空");
+        boolean saveResult = userService.userAdd(userAddDto);
+        return  ResultUtils.success(saveResult);
+    }
+
+
+
 }

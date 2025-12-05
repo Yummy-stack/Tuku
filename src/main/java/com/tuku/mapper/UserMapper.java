@@ -1,7 +1,7 @@
 package com.tuku.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tuku.domain.pojo.user.User;
+import com.tuku.model.entity.user.User;
 
 /**
  * <p>

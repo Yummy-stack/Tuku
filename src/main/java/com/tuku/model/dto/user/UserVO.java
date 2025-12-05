@@ -1,4 +1,4 @@
-package com.tuku.domain.dto.user;
+package com.tuku.model.dto.user;
 
 import lombok.Data;
 

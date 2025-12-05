@@ -3,15 +3,14 @@ package com.tuku.service.user.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
-import com.tuku.constant.user.UserLoginConstant;
 import com.tuku.constant.user.UserRegisterConstant;
-import com.tuku.domain.dto.user.UserLoginDto;
-import com.tuku.domain.dto.user.UserRegisterDto;
-import com.tuku.domain.enums.error.ErrorCode;
-import com.tuku.domain.pojo.user.User;
-import com.tuku.domain.vo.LoginUserVo;
+import com.tuku.model.dto.user.*;
+import com.tuku.model.enums.error.ErrorCode;
+import com.tuku.model.entity.user.User;
+import com.tuku.model.vo.LoginUserVo;
 import com.tuku.mapper.UserMapper;
 import com.tuku.service.user.IUserService;
 import com.tuku.utils.ThrowUtils;
@@ -21,6 +20,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static com.tuku.constant.user.UserLoginConstant.USER_LOGIN_STATE;
 
@@ -109,11 +110,49 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
+    public LoginUserVo getAnotherLoginUser(Long userId) {
+        ThrowUtils.throwIf(userId == null,ErrorCode.NOT_FOUND_ERROR);
+        User user = this.getById(userId);
+        LoginUserVo loginUserVo = BeanUtil.copyProperties(user, LoginUserVo.class);
+        return loginUserVo;
+    }
+
+    @Override
+    public boolean userAdd(UserAddDto userAddDto) {
+        ThrowUtils.throwIf(userAddDto == null,ErrorCode.NOT_FOUND_ERROR);
+        User user = BeanUtil.copyProperties(userAddDto, User.class);
+        boolean saveUser = this.save(user);
+        return saveUser;
+    }
+
+    @Override
+    public boolean userUpdate(UserUpdateDto userUpdateDto) {
+        return false;
+    }
+
+    @Override
+    public List<User> userQuery(UserQueryDto userQueryDto) {
+        ThrowUtils.throwIf(userQueryDto == null,ErrorCode.NOT_FOUND_ERROR);
+        Page<User> page = this.lambdaQuery()
+                .page(new Page<>(userQueryDto.getPageNum(), userQueryDto.getPageSize()));
+        long total = page.getTotal();
+        List<User> records = page.getRecords();
+        return records;
+    }
+
+    @Override
+    public User userInformation(Long userId) {
+        ThrowUtils.throwIf(userId == null,ErrorCode.NOT_FOUND_ERROR);
+        User user = this.getById(userId);
+        return user;
+    }
+
+    @Override
     public boolean userLogout(HttpServletRequest httpServletRequest) {
         ThrowUtils.throwIf( httpServletRequest == null,ErrorCode.PARAMS_ERROR,"传入request的参数为空");
         Object userObj = httpServletRequest.getAttribute(USER_LOGIN_STATE);
         ThrowUtils.throwIf(userObj == null,ErrorCode.PARAMS_ERROR,"用户未登录");
-        httpServletRequest.removeAttribute(USER_LOGIN_STATE);
+        httpServletRequest.getSession().removeAttribute(USER_LOGIN_STATE);
         return true;
     }
 }

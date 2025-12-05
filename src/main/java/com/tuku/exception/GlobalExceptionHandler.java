@@ -1,7 +1,7 @@
 package com.tuku.exception;
 
 import com.tuku.common.BaseResponse;
-import com.tuku.domain.enums.error.ErrorCode;
+import com.tuku.model.enums.error.ErrorCode;
 import com.tuku.utils.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;

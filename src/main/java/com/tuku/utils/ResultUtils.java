@@ -1,7 +1,7 @@
 package com.tuku.utils;
 
 import com.tuku.common.BaseResponse;
-import com.tuku.domain.enums.error.ErrorCode;
+import com.tuku.model.enums.error.ErrorCode;
 
 
 public class ResultUtils {

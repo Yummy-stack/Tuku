@@ -1,11 +1,12 @@
-package com.tuku.domain.dto.user;
+package com.tuku.model.dto.user;
 
 import lombok.Data;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @Data
-public class UserAddRequest implements Serializable {
+public class UserAddDto implements Serializable {
 
     /**
      * 用户昵称
@@ -32,5 +33,6 @@ public class UserAddRequest implements Serializable {
      */
     private String userRole;
 
+    @Serial
     private static final long serialVersionUID = 1L;
 }

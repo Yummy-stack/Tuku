@@ -1,4 +1,4 @@
-package com.tuku.domain.request;
+package com.tuku.model.request;
 
 import lombok.Data;
 

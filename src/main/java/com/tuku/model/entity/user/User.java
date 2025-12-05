@@ -1,4 +1,4 @@
-package com.tuku.domain.pojo.user;
+package com.tuku.model.entity.user;
 
 import com.baomidou.mybatisplus.annotation.*;
 
