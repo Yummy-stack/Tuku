@@ -10,7 +10,7 @@ import com.tuku.constant.user.UserRegisterConstant;
 import com.tuku.model.dto.user.*;
 import com.tuku.model.enums.error.ErrorCode;
 import com.tuku.model.entity.user.User;
-import com.tuku.model.vo.LoginUserVo;
+import com.tuku.model.vo.user.LoginUserVo;
 import com.tuku.mapper.UserMapper;
 import com.tuku.service.user.IUserService;
 import com.tuku.utils.ThrowUtils;

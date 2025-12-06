@@ -3,7 +3,7 @@ package com.tuku.aop.user;
 import com.tuku.annotation.AuthCheck;
 import com.tuku.model.enums.error.ErrorCode;
 import com.tuku.model.enums.user.UserRoleEnum;
-import com.tuku.model.vo.LoginUserVo;
+import com.tuku.model.vo.user.LoginUserVo;
 import com.tuku.service.user.IUserService;
 import com.tuku.utils.ThrowUtils;
 import jakarta.annotation.Resource;

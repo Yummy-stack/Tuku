@@ -7,7 +7,7 @@ import com.tuku.model.dto.user.UserAddDto;
 import com.tuku.model.dto.user.UserLoginDto;
 import com.tuku.model.dto.user.UserRegisterDto;
 import com.tuku.model.enums.error.ErrorCode;
-import com.tuku.model.vo.LoginUserVo;
+import com.tuku.model.vo.user.LoginUserVo;
 import com.tuku.service.user.IUserService;
 import com.tuku.utils.ResultUtils;
 import com.tuku.utils.ThrowUtils;

@@ -1,4 +1,4 @@
-package com.tuku.model.vo;
+package com.tuku.model.vo.user;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;

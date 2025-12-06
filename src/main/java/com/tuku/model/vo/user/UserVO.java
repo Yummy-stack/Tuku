@@ -1,4 +1,4 @@
-package com.tuku.model.dto.user;
+package com.tuku.model.vo.user;
 
 import lombok.Data;
 
