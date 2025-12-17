@@ -3,8 +3,11 @@ package com.tuku.exception;
 import com.tuku.model.enums.error.ErrorCode;
 import lombok.Getter;
 
+import java.io.Serial;
+
 @Getter
 public class BusinessException extends RuntimeException {
+    @Serial
     private static final long serialVersionUID = 1690627443554021401L;
     /**
      * 错误码

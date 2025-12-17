@@ -14,13 +14,13 @@ import com.tuku.model.vo.user.LoginUserVo;
 import com.tuku.mapper.UserMapper;
 import com.tuku.service.user.IUserService;
 import com.tuku.utils.ThrowUtils;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 import static com.tuku.constant.user.UserLoginConstant.USER_LOGIN_STATE;

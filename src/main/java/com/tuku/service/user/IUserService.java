@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.tuku.model.dto.user.*;
 import com.tuku.model.entity.user.User;
 import com.tuku.model.vo.user.LoginUserVo;
-import jakarta.servlet.http.HttpServletRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**

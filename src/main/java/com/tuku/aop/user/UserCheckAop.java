@@ -6,8 +6,6 @@ import com.tuku.model.enums.user.UserRoleEnum;
 import com.tuku.model.vo.user.LoginUserVo;
 import com.tuku.service.user.IUserService;
 import com.tuku.utils.ThrowUtils;
-import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -15,6 +13,9 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 @Aspect
 @Component

@@ -13,10 +13,11 @@ import com.tuku.utils.ResultUtils;
 import com.tuku.utils.ThrowUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 import static com.tuku.constant.user.UserRoleConstant.ADMIN_ROLE;
 
@@ -25,7 +26,7 @@ import static com.tuku.constant.user.UserRoleConstant.ADMIN_ROLE;
 @CrossOrigin
 @RequiredArgsConstructor
 @Slf4j
-@Api(value = "用户模块的API")
+@Api(tags = "用户模块的API")
 public class UserController {
 
     private final IUserService userService;

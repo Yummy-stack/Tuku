@@ -15,11 +15,11 @@ import com.tuku.model.vo.picture.PagePictureVo;
 import com.tuku.service.picture.IPictureService;
 import com.tuku.service.user.IUserService;
 import com.tuku.utils.ThrowUtils;
-import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
