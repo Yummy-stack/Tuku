@@ -21,7 +21,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Optional;
 
 import static com.tuku.constant.user.UserLoginConstant.USER_LOGIN_STATE;
 
@@ -80,7 +82,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         boolean isLogin = this.verifyPassword(userLoginDto.getUserPassword(), user.getUserPassword());
         ThrowUtils.throwIf(!isLogin, ErrorCode.PARAMS_ERROR, "密码错误");
 
-        httpServletRequest.setAttribute(USER_LOGIN_STATE, user);
+        httpServletRequest.getSession().setAttribute(USER_LOGIN_STATE, user);
 
         return user.getId();
     }
@@ -104,7 +106,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public LoginUserVo getLoginUser(HttpServletRequest httpServletRequest) {
         ThrowUtils.throwIf(httpServletRequest == null, ErrorCode.PARAMS_ERROR);
-        User user = (User) httpServletRequest.getAttribute(USER_LOGIN_STATE);
+        User user = (User) httpServletRequest.getSession().getAttribute(USER_LOGIN_STATE);
         LoginUserVo loginUserVo = BeanUtil.copyProperties(user, LoginUserVo.class);
         return loginUserVo;
     }
@@ -150,7 +152,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public boolean userLogout(HttpServletRequest httpServletRequest) {
         ThrowUtils.throwIf(httpServletRequest == null, ErrorCode.PARAMS_ERROR, "传入request的参数为空");
-        Object userObj = httpServletRequest.getAttribute(USER_LOGIN_STATE);
+        Object userObj = httpServletRequest.getSession().getAttribute(USER_LOGIN_STATE);
         ThrowUtils.throwIf(userObj == null, ErrorCode.PARAMS_ERROR, "用户未登录");
         httpServletRequest.getSession().removeAttribute(USER_LOGIN_STATE);
         return true;

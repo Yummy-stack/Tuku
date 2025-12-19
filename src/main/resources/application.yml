@@ -29,11 +29,11 @@ server:
 knife4j:
   enable: true
   openapi:
-    title: "接口文档"
+    title: "All APIS"
     version: 1.0
     group:
       default:
-        group-name: 'default name'
+#        group-name: 'tukuApi'
         api-rule: package
         api-rule-resources:
           - com.tuku.controller
