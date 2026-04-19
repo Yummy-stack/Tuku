@@ -20,6 +20,11 @@
     </properties>
     <dependencies>
         <dependency>
+            <groupId>com.tuku</groupId>
+            <artifactId>tuku-model</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.redisson</groupId>
             <artifactId>redisson</artifactId>
             <version>3.23.3</version>

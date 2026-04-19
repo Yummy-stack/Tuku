@@ -18,4 +18,7 @@ public interface KeyConstant {
 
     // 热Key阈值
     int HOT_KEY_THRESHOLD = 100;
+
+    // 用户签到表的Key前缀
+    String USER_SIGN_IN_KEY = "user:sign-in:";
 }

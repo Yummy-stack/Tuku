@@ -7,7 +7,9 @@ import com.tuku.tukuModel.entity.user.User;
 import com.tuku.tukuModel.vo.user.LoginUserVo;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 
 public interface IUserService extends IService<User> {
@@ -49,4 +51,10 @@ public interface IUserService extends IService<User> {
 
     //判断是否为管理员
     boolean isAdmin(User user);
+
+    //用户进行签到
+    boolean userSignsIn(Long userId);
+
+    //用户查看签到表
+    Map<LocalDate,Boolean> allUserSignIn(AllUserSignInDto allUserSignInDto);
 }

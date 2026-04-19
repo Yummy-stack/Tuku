@@ -15,20 +15,27 @@ import com.tuku.tukuModel.vo.user.LoginUserVo;
 import com.tuku.tukuService.user.IUserService;
 import com.tuku.tukucommon.constant.user.UserRegisterConstant;
 import com.tuku.tukucommon.utils.ThrowUtils;
+import com.tuku.tukucommon.utils.redis.MergeKey;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mindrot.jbcrypt.BCrypt;
+import org.redisson.api.RBitSet;
+import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.time.LocalDate;
+import java.time.Year;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.tuku.tukucommon.constant.user.UserLoginConstant.USER_LOGIN_STATE;
-
 
 
 @Service
@@ -36,6 +43,9 @@ import static com.tuku.tukucommon.constant.user.UserLoginConstant.USER_LOGIN_STA
 @Slf4j
 @Transactional(rollbackFor = Exception.class)
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
+    @Resource
+    private RedissonClient redissonClient;
+
     @Override
     public boolean userRegister(UserRegisterDto userRegisterDto) {
         boolean paramNull = userRegisterDto == null || userRegisterDto.getUserAccount() == null
@@ -163,6 +173,48 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public boolean isAdmin(User user) {
         ThrowUtils.throwIf(user == null, ErrorCode.PARAMS_ERROR);
         return UserRoleEnum.ADMIN.getValue().equals(user.getUserRole());
+    }
+
+    @Override
+    public boolean userSignsIn(Long userId) {
+        if (userId == null) {
+            throw new RuntimeException("请先登录");
+        }
+
+        LocalDate now = LocalDate.now();
+        int year = now.getYear();
+        String userSignInKey = MergeKey.getUserSignInKey(userId, year);
+
+        RBitSet userbitSet = redissonClient.getBitSet(userSignInKey);
+        int dayOfYear = now.getDayOfYear();
+        boolean setResult = userbitSet.set(dayOfYear, true);
+
+        return setResult;
+    }
+
+    @Override
+    public Map<LocalDate, Boolean> allUserSignIn(AllUserSignInDto allUserSignInDto) {
+        if (allUserSignInDto == null) {
+            throw new RuntimeException(ErrorCode.PARAMS_ERROR.getMessage());
+        }
+        if (allUserSignInDto.getUserId() == null || allUserSignInDto.getYear() == null) {
+            throw new RuntimeException(ErrorCode.PARAMS_ERROR.getMessage());
+        }
+
+        Long userId = allUserSignInDto.getUserId();
+        Integer year = allUserSignInDto.getYear();
+        String userSignInKey = MergeKey.getUserSignInKey(userId, year);
+        RBitSet bitSet = redissonClient.getBitSet(userSignInKey);
+
+        LinkedHashMap<LocalDate, Boolean> signInResult = new LinkedHashMap<>();
+        int totalDays = Year.of(year).length();
+        for (int day = 1; day <= totalDays; day++) {
+            LocalDate date = LocalDate.ofYearDay(year, day);
+            boolean isSignIn = bitSet.get(day);
+            signInResult.put(date, isSignIn);
+        }
+
+        return signInResult;
     }
 
     @Override

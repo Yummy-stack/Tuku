@@ -20,7 +20,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>tuku-sdk</module>
+<!--        <module>tuku-sdk</module>-->
         <module>tuku-web</module>
         <module>tuku-service</module>
         <module>tuku-mapper</module>

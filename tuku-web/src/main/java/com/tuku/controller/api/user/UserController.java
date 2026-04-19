@@ -2,10 +2,7 @@ package com.tuku.controller.api.user;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.tuku.tukuModel.dto.user.UserAddDto;
-import com.tuku.tukuModel.dto.user.UserLoginDto;
-import com.tuku.tukuModel.dto.user.UserQueryDto;
-import com.tuku.tukuModel.dto.user.UserRegisterDto;
+import com.tuku.tukuModel.dto.user.*;
 import com.tuku.tukuModel.entity.user.User;
 import com.tuku.tukuModel.enums.error.ErrorCode;
 import com.tuku.tukuModel.vo.user.LoginUserVo;
@@ -20,7 +17,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+
+import java.time.LocalDate;
+import java.util.Map;
 
 import static com.tuku.tukucommon.constant.user.UserRoleConstant.ADMIN_ROLE;
 
@@ -95,6 +96,29 @@ public class UserController {
         Page<User> loginUserVoPage = userService.listUserVoByPage(userQueryDto, request);
         //返回值
         return ResultUtils.success(loginUserVoPage);
+    }
+
+    @ApiOperation(value = "用户进行签到")
+    @PostMapping(value = "/signs-in")
+    BaseResponse<Boolean> userSignsIn(Long userId) {
+        if (userId == null) {
+            throw new RuntimeException(ErrorCode.PARAMS_ERROR.getMessage());
+        }
+        boolean signsInResult = userService.userSignsIn(userId);
+        return ResultUtils.success(signsInResult);
+    }
+
+    @ApiOperation(value = "用户获取某一年的所有签到")
+    @PostMapping(value = "/signs-in/all")
+    BaseResponse<Map<LocalDate,Boolean>>  allUserSignIn(@RequestBody AllUserSignInDto allUserSignInDto) {
+        if (allUserSignInDto == null) {
+            throw new RuntimeException(ErrorCode.PARAMS_ERROR.getMessage());
+        }
+        Map<LocalDate, Boolean> allSignsIn = userService.allUserSignIn(allUserSignInDto);
+        if (allSignsIn == null) {
+            throw new RuntimeException(ErrorCode.SYSTEM_ERROR.getMessage());
+        }
+        return ResultUtils.success(allSignsIn);
     }
 
 }
