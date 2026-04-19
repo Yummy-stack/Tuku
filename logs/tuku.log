@@ -1,0 +1,19 @@
+2026-01-01 16:45:05.236 [main] INFO  com.tuku.TuKuApplication - Starting TuKuApplication using Java 21.0.2 on DESKTOP-POK7B2F with PID 40372 (D:\TuKu\target\classes started by rainsXZ in D:\TuKu)
+2026-01-01 16:45:05.239 [main] DEBUG com.tuku.TuKuApplication - Running with Spring Boot v2.7.6, Spring v5.3.24
+2026-01-01 16:45:05.239 [main] INFO  com.tuku.TuKuApplication - The following 1 profile is active: "local"
+2026-01-01 16:45:06.630 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2026-01-01 16:45:06.640 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-01-01 16:45:06.640 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-01-01 16:45:06.641 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.69]
+2026-01-01 16:45:06.729 [main] INFO  o.a.c.c.ContainerBase.[Tomcat].[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2026-01-01 16:45:06.729 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1386 ms
+2026-01-01 16:45:07.603 [main] INFO  s.d.s.w.WebMvcPropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2ControllerWebMvc#getDocumentation(String, HttpServletRequest)]
+2026-01-01 16:45:07.692 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-01-01 16:45:07.711 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path '/api'
+2026-01-01 16:45:07.712 [main] INFO  s.d.s.web.plugins.DocumentationPluginsBootstrapper - Documentation plugins bootstrapped
+2026-01-01 16:45:07.715 [main] INFO  s.d.s.web.plugins.DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+2026-01-01 16:45:07.756 [main] INFO  s.d.spring.web.scanners.ApiListingReferenceScanner - Scanning for api listing references
+2026-01-01 16:45:07.903 [main] INFO  s.d.s.w.r.operation.CachingOperationNameGenerator - Generating unique operation named: uploadPictureUsingPOST_1
+2026-01-01 16:45:07.908 [main] INFO  s.d.s.w.r.operation.CachingOperationNameGenerator - Generating unique operation named: deletePictureUsingPOST_1
+2026-01-01 16:45:07.910 [main] INFO  s.d.s.w.r.operation.CachingOperationNameGenerator - Generating unique operation named: downloadPictureUsingGET_1
+2026-01-01 16:45:07.960 [main] INFO  com.tuku.TuKuApplication - Started TuKuApplication in 3.196 seconds (JVM running for 4.368)

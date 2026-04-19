@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: TuKu
+  profiles:
+    active: local
+
+PIC_BUCKET_NAME: file--bucket-one-1322921281
+COS_URL_BUCKET_ONE: https://file--bucket-one-1322921281.cos.ap-guangzhou.myqcloud.com
+# 接口文档配置
+knife4j:
+  enable: true
+  openapi:
+    title: "TukuApi"
+    version: 1.0
+    description: "TuKu项目的Api接口"
+    group:
+      default:
+        #        group-name: 'tukuApi'
+        api-rule: package
+        api-rule-resources:
+          - com.tuku.controller

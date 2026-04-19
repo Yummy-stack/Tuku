@@ -1,0 +1,75 @@
+spring:
+  session:
+    store-type: redis
+    timeout: 259200
+  # banner的开关配置
+  main:
+    banner-mode: off
+  # Mysql数据库连接配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/yuxi?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+  # 文件上传大小控制
+  servlet:
+    multipart:
+      max-request-size: 100MB
+  # Redis配置
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    timeout: 5000ms
+    # 指定使用 Jedis
+#    client-type: jedis
+#    jedis:
+#        pool:
+#          max-active: 8       # 最大连接数
+#          max-idle: 8         # 最大空闲连接
+#          min-idle: 0         # 最小空闲连接
+#          max-wait: -1ms      # 最大等待时间，-1表示无限等待
+#          time-between-eviction-runs: 30000ms  # 逐出扫描间隔
+    lettuce:
+        pool:
+          max-active: 20
+          max-idle: 20
+          min-idle: 5
+          enabled: true
+
+# MybatisPlus的配置信息
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    banner: false
+
+# Session的过期时间设置、服务启动端口、请求前缀
+server:
+  reactive:
+    session:
+      cookie:
+        max-age: 259200
+      timeout: 500ms
+  port: 8080
+  servlet:
+    context-path: /api
+
+# Redis连接配置
+
+# 控制台打印日志的格式
+#logging:
+#  pattern:
+#    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr([%thread]){magenta} %clr(%-5level){highlight} %clr(%logger{50}){cyan} - %msg%n"
+
+#logging:
+#  pattern:
+#    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}.%M - %msg%n"
+
+#logging:
+#  pattern:
+#    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %level %logger{50} - %msg%n"
+#    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %level %logger{50} - %msg%n"
+#  level:
+#    root: INFO
+#    com.tuku: DEBUG

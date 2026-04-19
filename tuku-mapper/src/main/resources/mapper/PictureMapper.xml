@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tuku.tukuMapper.PictureMapper">
+
+    <select id="selectNoneExistent" resultType="com.tuku.tukuModel.entity.picture.Picture">
+        select picture.pic_url from picture where is_delete = #{number}
+    </select>
+
+    <select id="selectAllReviewedPictures" resultType="com.tuku.tukuModel.entity.picture.Picture">
+        select * from picture where review_status = 1 and is_delete = 0
+    </select>
+</mapper>

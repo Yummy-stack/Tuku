@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tuku.tukuMapper.PictureSpaceMapper">
+
+
+    <update id="updateByOnePicToSpa" parameterType="com.tuku.tukuModel.bo.pictureSpace.AddOnePicToSpaceBO">
+        update picture_space
+        set picture_space.current_size  = picture_space.current_size - #{addSize},
+            picture_space.current_count = picture_space.current_count + 1,
+            picture_space.update_user   = #{updateUser}
+        where picture_space.id = #{id}
+    </update>
+
+    <update id="updateByOnePicAwaySpa" parameterType="com.tuku.tukuModel.bo.pictureSpace.AddOnePicToSpaceBO">
+        update picture_space
+        set picture_space.current_size  = picture_space.current_size + #{addSize},
+            picture_space.current_count = picture_space.current_count - 1,
+            picture_space.update_user   = #{updateUser}
+        where picture_space.id = #{id}
+    </update>
+
+</mapper>

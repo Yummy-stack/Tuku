@@ -1,0 +1,16 @@
+ALTER TABLE `yuxi`.`user`
+    CHANGE COLUMN `userAccount` `user_account` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '账号' AFTER `id`,
+    CHANGE COLUMN `userPassword` `user_password` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '密码' AFTER `user_account`,
+    CHANGE COLUMN `userName` `user_name` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '用户昵称' AFTER `user_password`,
+    CHANGE COLUMN `userAvatar` `user_avatar` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '用户头像' AFTER `user_name`,
+    CHANGE COLUMN `userProfile` `user_profile` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '用户简介' AFTER `user_avatar`,
+    CHANGE COLUMN `userRole` `user_role` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'user' COMMENT '用户角色：user/admin' AFTER `user_profile`,
+    CHANGE COLUMN `vipExpireTime` `vip_expire_time` datetime NULL DEFAULT NULL COMMENT '会员过期时间' AFTER `user_role`,
+    CHANGE COLUMN `vipCode` `vip_code` varchar(128) NULL DEFAULT NULL COMMENT '会员兑换码' AFTER `vip_expire_time`,
+    CHANGE COLUMN `vipNumber` `vip_number` bigint NULL DEFAULT NULL COMMENT '会员编号' AFTER `vip_code`,
+    CHANGE COLUMN `shareCode` `share_code` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '分享码' AFTER `vip_number`,
+    CHANGE COLUMN `inviteUser` `invite_user` bigint NULL DEFAULT NULL COMMENT '邀请用户 id' AFTER `share_code`,
+    CHANGE COLUMN `editTime` `edit_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '编辑时间' AFTER `invite_user`,
+    CHANGE COLUMN `createTime` `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间' AFTER `edit_time`,
+    CHANGE COLUMN `updateTime` `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间' AFTER `create_time`,
+    CHANGE COLUMN `isDelete` `is_delete` tinyint NOT NULL DEFAULT 0 COMMENT '是否删除' AFTER `update_time`;
