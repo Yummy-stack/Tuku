@@ -99,8 +99,8 @@ public class UserController {
     }
 
     @ApiOperation(value = "用户进行签到")
-    @PostMapping(value = "/signs-in")
-    BaseResponse<Boolean> userSignsIn(Long userId) {
+    @PostMapping(value = "/signs-in/${userId}")
+    BaseResponse<Boolean> userSignsIn(@PathVariable(value = "userId") Long userId) {
         if (userId == null) {
             throw new RuntimeException(ErrorCode.PARAMS_ERROR.getMessage());
         }
