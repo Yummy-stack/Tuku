@@ -28,9 +28,8 @@
       </div>
       <a-form-item>
         <a-button type="primary" html-type="submit" style="width: 100%" :loading="loading"
-        >注册
-        </a-button
-        >
+          >注册
+        </a-button>
       </a-form-item>
     </a-form>
   </div>
@@ -47,7 +46,7 @@ const router = useRouter()
 const formState = reactive<API.UserRegisterDto>({
   userAccount: '',
   userPassword: '',
-  userConfirmPassword: ''
+  userConfirmPassword: '',
 })
 const loading = ref(false)
 
@@ -63,12 +62,12 @@ const rules: Record<string, Rule[]> = {
   userAccount: [{ required: true, message: '请输入账号' }],
   userPassword: [
     { required: true, message: '请输入密码' },
-    { min: 8, message: '密码不能小于 8 位' }
+    { min: 8, message: '密码不能小于 8 位' },
   ],
   userConfirmPassword: [
     { required: true, message: '请输入确认密码' },
-    { validator: validateConfirmPassword, trigger: 'change' } // 使用自定义校验
-  ]
+    { validator: validateConfirmPassword, trigger: 'change' }, // 使用自定义校验
+  ],
 }
 
 const handleSubmit = async (values: any) => {
@@ -79,7 +78,7 @@ const handleSubmit = async (values: any) => {
       message.success('注册成功')
       await router.push({
         path: '/user/login',
-        replace: true
+        replace: true,
       })
     } else {
       message.error('注册失败，' + res.data.message)
@@ -101,8 +100,9 @@ const handleSubmit = async (values: any) => {
   background: rgba(255, 255, 255, 0.86);
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.35);
-  box-shadow: 0 20px 50px rgba(51, 60, 140, 0.25),
-  0 8px 20px rgba(102, 126, 234, 0.2);
+  box-shadow:
+    0 20px 50px rgba(51, 60, 140, 0.25),
+    0 8px 20px rgba(102, 126, 234, 0.2);
   backdrop-filter: saturate(180%) blur(22px);
   z-index: 2;
   animation: cardFloat 6s ease-in-out infinite;
