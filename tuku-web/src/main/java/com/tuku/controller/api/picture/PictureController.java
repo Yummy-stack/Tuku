@@ -1,6 +1,5 @@
 package com.tuku.controller.api.picture;
 
-
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tuku.tukuModel.dto.picture.PictureReviewRequest;
@@ -34,7 +33,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.List;
 
-
 @Api(tags = "PictureApi")
 @RestController
 @RequestMapping("/picture")
@@ -52,8 +50,7 @@ public class PictureController {
     BaseResponse<PictureVO> uploadPicture(
             @ApiParam(value = "图片信息", required = true) @RequestPart("file") MultipartFile multipartFile,
             @ApiParam(value = "请求", required = true) HttpServletRequest request,
-            @ApiParam(value = "图片上传的参数", required = false) PictureUploadRequest pictureUploadRequest
-    ) {
+            @ApiParam(value = "图片上传的参数", required = false) PictureUploadRequest pictureUploadRequest) {
         LoginUserVo loginUser = userService.getLoginUser(request);
         ThrowUtils.throwIf(loginUser == null, "用户未登录");
         PictureVO result = pictureService.upLoadPicture(pictureUploadRequest, multipartFile, loginUser.getId());
@@ -65,8 +62,7 @@ public class PictureController {
     BaseResponse<PictureVO> uploadPictureV2(
             @ApiParam(value = "图片信息", required = true) @RequestPart("file") MultipartFile multipartFile,
             @ApiParam(value = "请求", required = true) HttpServletRequest request,
-            @ApiParam(value = "图片上传的参数", required = false) PictureUploadRequest pictureUploadRequest
-    ) {
+            @ApiParam(value = "图片上传的参数", required = false) PictureUploadRequest pictureUploadRequest) {
         LoginUserVo loginUser = userService.getLoginUser(request);
         ThrowUtils.throwIf(loginUser == null, "用户未登录");
         PictureVO result = pictureService.upLoadPictureV2(pictureUploadRequest, multipartFile, loginUser.getId());
@@ -77,8 +73,7 @@ public class PictureController {
     @PostMapping("/upload/v2")
     BaseResponse<PictureVO> uploadPictureByUrl(
             @ApiParam(value = "请求", required = true) HttpServletRequest request,
-            @ApiParam(value = "图片上传的参数", required = true) @RequestBody PictureUploadRequest pictureUploadRequest
-    ) {
+            @ApiParam(value = "图片上传的参数", required = true) @RequestBody PictureUploadRequest pictureUploadRequest) {
         LoginUserVo loginUser = userService.getLoginUser(request);
         ThrowUtils.throwIf(loginUser == null, "控制层参数为null");
         String uploadUrl = pictureUploadRequest.getFileUrl();
@@ -86,13 +81,11 @@ public class PictureController {
         return ResultUtils.success(result);
     }
 
-
     @ApiOperation(value = "图片下载")
     @GetMapping("/download")
     void downloadPicture(
             @ApiParam(value = "下载的文件名", required = true) @RequestParam("filePath") String filePath,
-            @ApiParam(value = "servlet参数") HttpServletResponse response
-    ) {
+            @ApiParam(value = "servlet参数") HttpServletResponse response) {
         ThrowUtils.throwIf(filePath == null || response == null, "控制层参数为空");
         pictureService.downloadPicture(filePath, response);
     }
@@ -101,32 +94,27 @@ public class PictureController {
     @GetMapping("/download/v2")
     void downloadPictureV2(
             @ApiParam(value = "下载的文件名", required = true) @RequestParam("filePath") String filePath,
-            @ApiParam(value = "servlet参数") HttpServletResponse response
-    ) {
+            @ApiParam(value = "servlet参数") HttpServletResponse response) {
         ThrowUtils.throwIf(filePath == null || response == null, "控制层参数为空");
         pictureService.downloadPictureV2(filePath, response);
     }
-
 
     @ApiOperation(value = "根据 id 获取图片（仅管理员可用）")
     @GetMapping("/get")
     @AuthCheck(mustRole = UserRoleConstant.ADMIN_ROLE)
     public BaseResponse<Picture> getPictureById(
             @ApiParam(value = "图片ID", required = true) @RequestParam(value = "id") Long id,
-            @ApiParam(value = "servlet参数") HttpServletRequest request
-    ) {
+            @ApiParam(value = "servlet参数") HttpServletRequest request) {
         ThrowUtils.throwIf(id <= 0 || request == null, "控制层参数为空");
         Picture picture = pictureService.getPictureById(id, request);
         return ResultUtils.success(picture);
     }
 
-
     @ApiOperation(value = " 根据 id 获取图片（封装类）")
     @GetMapping("/get/vo")
     public BaseResponse<PictureVO> getPictureVOById(
             @ApiParam(value = "图片ID", required = true) @RequestParam(value = "id") Long id,
-            @ApiParam(value = "servlet参数") HttpServletRequest request
-    ) {
+            @ApiParam(value = "servlet参数") HttpServletRequest request) {
         ThrowUtils.throwIf(id <= 0 || request == null, "控制层参数为空");
         PictureVO pictureVO = pictureService.getPictureVOById(id, request);
         return ResultUtils.success(pictureVO);
@@ -136,8 +124,7 @@ public class PictureController {
     @GetMapping("/get/vo/with/cache")
     public BaseResponse<PictureVO> getPictureVOByIdWithCache(
             @ApiParam(value = "图片ID", required = true) @RequestParam(value = "id") Long id,
-            @ApiParam(value = "servlet参数") HttpServletRequest request
-    ) {
+            @ApiParam(value = "servlet参数") HttpServletRequest request) {
         ThrowUtils.throwIf(id <= 0 || request == null, "控制层参数为空");
         PictureVO pictureVO = pictureService.getPictureVOByIdWithCache(id, request);
         return ResultUtils.success(pictureVO);
@@ -147,22 +134,29 @@ public class PictureController {
     @PostMapping("/list/page")
     @AuthCheck(mustRole = UserRoleConstant.ADMIN_ROLE)
     public BaseResponse<Page<Picture>> listPictureByPage(
-            @ApiParam(value = "查询参数", required = false) @RequestBody PictureQueryRequest pictureQueryRequest
-    ) {
+            @ApiParam(value = "查询参数", required = false) @RequestBody PictureQueryRequest pictureQueryRequest) {
         ThrowUtils.throwIf(pictureQueryRequest == null, "控制层参数为空");
         Page<Picture> picturePage = pictureService.listPictureByPage(pictureQueryRequest);
         return ResultUtils.success(picturePage);
     }
 
-
     @ApiOperation(value = "分页获取图片列表（封装类）")
     @PostMapping("/list/page/vo")
     public BaseResponse<Page<PictureVO>> listPictureVOByPage(
             @ApiParam(value = "查询参数", required = false) @RequestBody PictureQueryRequest pictureQueryRequest,
-            @ApiParam(value = "servlet参数") HttpServletRequest request
-    ) {
+            @ApiParam(value = "servlet参数") HttpServletRequest request) {
         ThrowUtils.throwIf(pictureQueryRequest == null, "控制层参数为空");
         Page<PictureVO> pictureVOPage = pictureService.listPictureVOByPage(pictureQueryRequest, request);
+        return ResultUtils.success(pictureVOPage);
+    }
+
+    @ApiOperation(value = "从 ES 分页获取图片列表")
+    @PostMapping("/search/page/vo")
+    public BaseResponse<Page<PictureVO>> searchPictureVOByPage(
+            @ApiParam(value = "查询参数", required = false) @RequestBody PictureQueryRequest pictureQueryRequest,
+            @ApiParam(value = "servlet参数") HttpServletRequest request) {
+        ThrowUtils.throwIf(pictureQueryRequest == null, "控制层参数为空");
+        Page<PictureVO> pictureVOPage = pictureService.searchFromEs(pictureQueryRequest);
         return ResultUtils.success(pictureVOPage);
     }
 
@@ -170,56 +164,47 @@ public class PictureController {
     @PostMapping("/list/page/vo/v2")
     public BaseResponse<Page<PictureVO>> listPictureVOByPageV2(
             @ApiParam(value = "查询参数", required = false) @RequestBody PictureQueryRequest pictureQueryRequest,
-            @ApiParam(value = "servlet参数") HttpServletRequest request
-    ) {
+            @ApiParam(value = "servlet参数") HttpServletRequest request) {
         ThrowUtils.throwIf(pictureQueryRequest == null, "控制层参数为空");
         Page<PictureVO> pictureVOPage = pictureService.listPictureVOByPageV2(pictureQueryRequest, request);
         return ResultUtils.success(pictureVOPage);
     }
 
-
     @ApiOperation(value = "分页获取审核通过的图片列表（封装类）-- 缓存优化版本")
     @PostMapping("/list/page/vo/v2/with/cache")
     public BaseResponse<Page<PictureVO>> listPictureVOByPageV2WithCache(
             @ApiParam(value = "查询参数", required = false) @RequestBody PictureQueryRequest pictureQueryRequest,
-            @ApiParam(value = "servlet参数") HttpServletRequest request
-    ) {
+            @ApiParam(value = "servlet参数") HttpServletRequest request) {
         ThrowUtils.throwIf(pictureQueryRequest == null, "控制层参数为空");
         Page<PictureVO> pictureVOPage = pictureService.listPictureVOByPageV2WithCache(pictureQueryRequest, request);
         return ResultUtils.success(pictureVOPage);
     }
 
-
     @ApiOperation(value = "删除图片")
     @PostMapping("/delete")
     public BaseResponse<Boolean> deletePicture(
             @ApiParam(value = "删除图片的参数", required = true) @RequestBody DeleteRequest deleteRequest,
-            @ApiParam(value = "servlet参数") HttpServletRequest request
-    ) {
+            @ApiParam(value = "servlet参数") HttpServletRequest request) {
         ThrowUtils.throwIf(deleteRequest == null, "控制层参数为空");
 
         return null;
 
     }
 
-
     @ApiOperation(value = "更新图片（仅管理员可用）")
     @PostMapping("/update")
     @AuthCheck(mustRole = UserRoleConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> updatePicture(
-            @ApiParam(value = "更新参数", required = false) @RequestBody PictureUpdateRequest pictureUpdateRequest
-    ) {
+            @ApiParam(value = "更新参数", required = false) @RequestBody PictureUpdateRequest pictureUpdateRequest) {
         return null;
 
     }
-
 
     @ApiOperation(value = "编辑图片（给用户使用）")
     @PostMapping("/edit")
     public BaseResponse<Boolean> editPicture(
             @ApiParam(value = "编辑参数", required = false) @RequestBody PictureEditRequest pictureEditRequest,
-            @ApiParam(value = "servlet参数") HttpServletRequest request
-    ) {
+            @ApiParam(value = "servlet参数") HttpServletRequest request) {
         ThrowUtils.throwIf(pictureEditRequest == null, "控制层参数为空");
         LoginUserVo loginUserVo = userService.getLoginUser(request);
         boolean editResult = pictureService.editPicture(pictureEditRequest, loginUserVo);
@@ -242,8 +227,7 @@ public class PictureController {
     @AuthCheck(mustRole = UserRoleConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> reviewPicture(
             @ApiParam(value = "图片审核Dto", required = true) PictureReviewRequest pictureReviewRequest,
-            @ApiParam(value = "servlet参数") HttpServletRequest request
-    ) {
+            @ApiParam(value = "servlet参数") HttpServletRequest request) {
         ThrowUtils.throwIf(pictureReviewRequest == null || request == null, "控制层参数为空");
         LoginUserVo loginUser = userService.getLoginUser(request);
         ThrowUtils.throwIf(loginUser == null, "控制层参数为null");
@@ -256,8 +240,7 @@ public class PictureController {
     @AuthCheck(mustRole = UserRoleConstant.ADMIN_ROLE)
     public BaseResponse<Integer> uploadPictureByBatch(
             @ApiParam(value = "批量抓取的Dto参数") @RequestBody PictureUploadByBatchRequest pictureUploadByBatchRequest,
-            @ApiParam(value = "servlet参数") HttpServletRequest request
-    ) {
+            @ApiParam(value = "servlet参数") HttpServletRequest request) {
         ThrowUtils.throwIf(pictureUploadByBatchRequest == null, ErrorCode.PARAMS_ERROR);
         LoginUserVo loginUser = userService.getLoginUser(request);
         int uploadCount = pictureService.upLoadPicturesBySearch(pictureUploadByBatchRequest, loginUser);

@@ -47,4 +47,6 @@ public interface IPictureService extends IService<Picture> {
     PictureVO upLoadPictureV2(PictureUploadRequest pictureUploadRequest, MultipartFile multipartFile, Long userId);
 
     void downloadPictureV2(String filePath, HttpServletResponse response);
+
+    Page<PictureVO> searchFromEs(PictureQueryRequest pictureQueryRequest);
 }

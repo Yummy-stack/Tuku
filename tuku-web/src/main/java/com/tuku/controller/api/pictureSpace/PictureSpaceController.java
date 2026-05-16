@@ -28,7 +28,6 @@ import java.util.Arrays;
 import java.util.List;
 
 
-
 @Api(tags = "pictureSpaceApi")
 @RestController
 @RequestMapping("/picture-space")

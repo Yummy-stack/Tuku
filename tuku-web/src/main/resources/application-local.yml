@@ -37,6 +37,10 @@ spring:
           min-idle: 5
           enabled: true
 
+  elasticsearch:
+    uris: http://localhost:9200
+    connection-timeout: 1s
+
 # MybatisPlus的配置信息
 mybatis-plus:
   configuration:

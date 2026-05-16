@@ -12,6 +12,8 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.gson.Gson;
 
+import com.tuku.es.document.PictureEsDTO;
+import com.tuku.es.repository.PictureEsRepository;
 import com.tuku.manager.CacheManager;
 import com.tuku.tukuMapper.PictureMapper;
 import com.tuku.tukuMapper.TaskinfoLogsMapper;
@@ -43,6 +45,18 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import cn.hutool.core.collection.CollUtil;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.sort.SortBuilder;
+import org.elasticsearch.search.sort.SortBuilders;
+import org.elasticsearch.search.sort.SortOrder;
+import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.core.SearchHit;
+import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,7 +73,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static com.tuku.tukucommon.constant.redis.KeyConstant.PICTURE_DETAIL;
-
 
 @Service
 @Slf4j
@@ -88,6 +101,12 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture> impl
     @Resource
     private CacheManager cacheManager;
 
+    @Resource
+    private PictureEsRepository pictureEsRepository;
+
+    @Resource
+    private ElasticsearchRestTemplate elasticsearchRestTemplate;
+
     public static final Cache<Object, Object> pictureCache = Caffeine.newBuilder()
             .maximumSize(1000)
             .expireAfterWrite(10, TimeUnit.MINUTES)
@@ -95,7 +114,8 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture> impl
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public PictureVO upLoadPicture(PictureUploadRequest pictureUploadRequest, MultipartFile multipartFile, Long userId) {
+    public PictureVO upLoadPicture(PictureUploadRequest pictureUploadRequest, MultipartFile multipartFile,
+                                   Long userId) {
         // 参数校验
         ThrowUtils.throwIf(multipartFile.isEmpty(), ErrorCode.NOT_FOUND_ERROR);
         ThrowUtils.throwIf(userId == null, "用户未登录");
@@ -131,12 +151,11 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture> impl
         taskinfo.setCreateUser(userId);
 
         TaskPicBo taskPicBo = new TaskPicBo();
-//        taskPicBo.(picture.getId());
-//        taskPicBo.setExecuteTime(new Date(taskTime));
+        // taskPicBo.(picture.getId());
+        // taskPicBo.setExecuteTime(new Date(taskTime));
         byte[] taskPicBoSerialize = ProtostuffUtil.serialize(taskPicBo);
         taskinfo.setParameters(taskPicBoSerialize);
         taskinfoService.save(taskinfo);
-
 
         PictureVO pictureVO = PictureVO.entityToVo(picture);
 
@@ -182,8 +201,9 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture> impl
         Page<Picture> picturePage = this.lambdaQuery()
                 .eq(StrUtil.isNotBlank(category), Picture::getPicCategory, category)
                 .in(tags != null && !tags.isEmpty(), Picture::getPicTags, tags)
-                .and(StrUtil.isNotBlank(searchText), i -> i.like(StrUtil.isNotBlank(category), Picture::getPicName, searchText)
-                        .or().like(StrUtil.isNotBlank(category), Picture::getPicIntroduction, searchText))
+                .and(StrUtil.isNotBlank(searchText),
+                        i -> i.like(StrUtil.isNotBlank(category), Picture::getPicName, searchText)
+                                .or().like(StrUtil.isNotBlank(category), Picture::getPicIntroduction, searchText))
                 .page(new Page<>(pageNum, pageSize));
 
         return picturePage;
@@ -203,8 +223,9 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture> impl
         Page<Picture> picturePage = this.lambdaQuery()
                 .eq(StrUtil.isNotBlank(category), Picture::getPicCategory, category)
                 .in(tags != null && !tags.isEmpty(), Picture::getPicTags, tags)
-                .and(StrUtil.isNotBlank(searchText), w -> w.like(StrUtil.isNotBlank(searchText), Picture::getPicName, searchText)
-                        .or().like(StrUtil.isNotBlank(searchText), Picture::getPicIntroduction, searchText))
+                .and(StrUtil.isNotBlank(searchText),
+                        w -> w.like(StrUtil.isNotBlank(searchText), Picture::getPicName, searchText)
+                                .or().like(StrUtil.isNotBlank(searchText), Picture::getPicIntroduction, searchText))
                 .gt(startEditTime != null, Picture::getEditTime, startEditTime)
                 .lt(endEditTime != null, Picture::getEditTime, endEditTime)
                 .page(new Page<>(pageNum, pageSize));
@@ -233,11 +254,12 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture> impl
         Page<Picture> picturePage = this.lambdaQuery()
                 .eq(Picture::getReviewStatus, 1)
                 .eq(StrUtil.isNotBlank(category), Picture::getPicCategory, category)
-                .and(StrUtil.isNotBlank(searchText), w -> w.like(StrUtil.isNotBlank(searchText), Picture::getPicName, searchText)
-                        .or().like(StrUtil.isNotBlank(searchText), Picture::getPicIntroduction, searchText))
+                .and(StrUtil.isNotBlank(searchText),
+                        w -> w.like(StrUtil.isNotBlank(searchText), Picture::getPicName, searchText)
+                                .or().like(StrUtil.isNotBlank(searchText), Picture::getPicIntroduction, searchText))
                 .page(new Page<>(pageNum, pageSize));
 
-        //根据标签来进行过滤
+        // 根据标签来进行过滤
         if (tags != null && !tags.isEmpty()) {
             List<Long> pictureIdList = picturePage.getRecords().stream()
                     .filter(picture -> filterPictureByTag(picture, tags))
@@ -330,7 +352,8 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture> impl
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int upLoadPicturesBySearch(PictureUploadByBatchRequest pictureUploadByBatchRequest, LoginUserVo loginUserVo) {
+    public int upLoadPicturesBySearch(PictureUploadByBatchRequest pictureUploadByBatchRequest,
+                                      LoginUserVo loginUserVo) {
         String searchText = pictureUploadByBatchRequest.getSearchText();
         // 格式化数量
         Integer count = pictureUploadByBatchRequest.getCount();
@@ -569,6 +592,95 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture> impl
                 .eq(Picture::getPicUrl, filePath)
                 .one();
         fileManager.downloadPictureFromCOS(filePath, picture, response);
+    }
+
+    @Override
+    public Page<PictureVO> searchFromEs(PictureQueryRequest pictureQueryRequest) {
+        ThrowUtils.throwIf(pictureQueryRequest == null, ErrorCode.PARAMS_ERROR);
+        Long id = pictureQueryRequest.getId();
+        String name = pictureQueryRequest.getName();
+        String introduction = pictureQueryRequest.getIntroduction();
+        String category = pictureQueryRequest.getCategory();
+        List<String> tags = pictureQueryRequest.getTags();
+        String searchText = pictureQueryRequest.getSearchText();
+        Long userId = pictureQueryRequest.getUserId();
+        Date startEditTime = pictureQueryRequest.getStartEditTime();
+        Date endEditTime = pictureQueryRequest.getEndEditTime();
+        int current = pictureQueryRequest.getPageNum();
+        int pageSize = pictureQueryRequest.getPageSize();
+        String sortField = pictureQueryRequest.getSortField();
+        String sortOrder = pictureQueryRequest.getSortOrder();
+
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        // 过滤
+        boolQueryBuilder.filter(QueryBuilders.termQuery("isDelete", 0));
+        if (id != null) {
+            boolQueryBuilder.filter(QueryBuilders.termQuery("id", id));
+        }
+        if (userId != null) {
+            boolQueryBuilder.filter(QueryBuilders.termQuery("createUser", userId));
+        }
+        if (StrUtil.isNotBlank(category)) {
+            boolQueryBuilder.filter(QueryBuilders.termQuery("picCategory", category));
+        }
+        if (CollUtil.isNotEmpty(tags)) {
+            for (String tag : tags) {
+                boolQueryBuilder.filter(QueryBuilders.termQuery("picTags", tag));
+            }
+        }
+        if (startEditTime != null) {
+            boolQueryBuilder.filter(QueryBuilders.rangeQuery("editTime").gt(startEditTime.getTime()));
+        }
+        if (endEditTime != null) {
+            boolQueryBuilder.filter(QueryBuilders.rangeQuery("editTime").lt(endEditTime.getTime()));
+        }
+        // 审核状态必须为通过
+        boolQueryBuilder.filter(QueryBuilders.termQuery("reviewStatus", 1));
+
+        // 搜索
+        if (StrUtil.isNotBlank(searchText)) {
+            boolQueryBuilder.should(QueryBuilders.matchQuery("picName", searchText));
+            boolQueryBuilder.should(QueryBuilders.matchQuery("picIntroduction", searchText));
+            boolQueryBuilder.minimumShouldMatch(1);
+        }
+        if (StrUtil.isNotBlank(name)) {
+            boolQueryBuilder.should(QueryBuilders.matchQuery("picName", name));
+            boolQueryBuilder.minimumShouldMatch(1);
+        }
+        if (StrUtil.isNotBlank(introduction)) {
+            boolQueryBuilder.should(QueryBuilders.matchQuery("picIntroduction", introduction));
+            boolQueryBuilder.minimumShouldMatch(1);
+        }
+
+        // 排序
+        SortBuilder<?> sortBuilder = SortBuilders.scoreSort();
+        if (StrUtil.isNotBlank(sortField)) {
+            sortBuilder = SortBuilders.fieldSort(sortField);
+            sortBuilder.order("ascend".equals(sortOrder) ? SortOrder.ASC : SortOrder.DESC);
+        }
+
+        // 分页
+        PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
+
+        // 构造查询
+        NativeSearchQuery searchQuery = new NativeSearchQueryBuilder()
+                .withQuery(boolQueryBuilder)
+                .withPageable(pageRequest)
+                .withSorts(sortBuilder)
+                .build();
+
+        SearchHits<PictureEsDTO> searchHits = elasticsearchRestTemplate.search(searchQuery, PictureEsDTO.class);
+
+        Page<PictureVO> page = new Page<>(current, pageSize, searchHits.getTotalHits());
+        List<PictureVO> resourceList = new ArrayList<>();
+        if (searchHits.hasSearchHits()) {
+            List<SearchHit<PictureEsDTO>> searchHitList = searchHits.getSearchHits();
+            for (SearchHit<PictureEsDTO> searchHit : searchHitList) {
+                resourceList.add(PictureVO.entityToVo(PictureEsDTO.dtoToObj(searchHit.getContent())));
+            }
+        }
+        page.setRecords(resourceList);
+        return page;
     }
 
     @Override
