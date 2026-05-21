@@ -1,7 +1,7 @@
 package com.tuku.tukuMapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tuku.tukuModel.entity.question.bank.QuestionBank;
+import com.tuku.tukuModel.entity.question.QuestionBank;
 
 /**
  * <p>

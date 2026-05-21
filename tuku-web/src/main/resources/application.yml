@@ -2,7 +2,7 @@ spring:
   application:
     name: TuKu
   profiles:
-    active: local
+    active: local-two
 
 PIC_BUCKET_NAME: file--bucket-one-1322921281
 COS_URL_BUCKET_ONE: https://file--bucket-one-1322921281.cos.ap-guangzhou.myqcloud.com

@@ -99,7 +99,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "用户进行签到")
-    @PostMapping(value = "/signs-in/${userId}")
+    @PostMapping(value = "/signs-in/{userId}")
     BaseResponse<Boolean> userSignsIn(@PathVariable(value = "userId") Long userId) {
         if (userId == null) {
             throw new RuntimeException(ErrorCode.PARAMS_ERROR.getMessage());
@@ -110,7 +110,7 @@ public class UserController {
 
     @ApiOperation(value = "用户获取某一年的所有签到")
     @PostMapping(value = "/signs-in/all")
-    BaseResponse<Map<LocalDate,Boolean>>  allUserSignIn(@RequestBody AllUserSignInDto allUserSignInDto) {
+    BaseResponse<Map<LocalDate, Boolean>> allUserSignIn(@RequestBody AllUserSignInDto allUserSignInDto) {
         if (allUserSignInDto == null) {
             throw new RuntimeException(ErrorCode.PARAMS_ERROR.getMessage());
         }

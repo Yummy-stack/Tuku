@@ -13,35 +13,25 @@ import java.time.LocalDateTime;
 import java.io.Serializable;
 import java.util.Date;
 
-
-@ApiModel(value = "题目")
-@TableName(value = "question")
+@ApiModel(value = "题目和题库的关联关系")
+@TableName(value = "question_bank_question")
 @Data
-public class Question implements Serializable {
+public class QuestionBankQuestion implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "题目id")
+    @ApiModelProperty(value = "题目和题库的关联关系id")
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "标题")
-    private String title;
+    @ApiModelProperty(value = "题库 id")
+    private Long questionBankId;
 
-    @ApiModelProperty(value = "内容")
-    private String content;
-
-    @ApiModelProperty(value = "标签列表（json 数组）")
-    private String tags;
-
-    @ApiModelProperty(value = "推荐答案")
-    private String answer;
+    @ApiModelProperty(value = "题目 id")
+    private Long questionId;
 
     @ApiModelProperty(value = "创建用户 id")
     private Long userId;
-
-    @ApiModelProperty(value = "编辑时间")
-    private Date editTime;
 
     @ApiModelProperty(value = "创建时间")
     private Date createTime;
@@ -49,7 +39,4 @@ public class Question implements Serializable {
     @ApiModelProperty(value = "更新时间")
     private Date updateTime;
 
-    @ApiModelProperty(value = "是否删除")
-    @TableLogic
-    private Integer isDelete;
 }

@@ -14,28 +14,25 @@ import java.io.Serializable;
 import java.util.Date;
 
 
-@ApiModel(value = "题目")
-@TableName(value = "question")
+@ApiModel(value = "题库")
+@TableName(value = "question_bank")
 @Data
-public class Question implements Serializable {
+public class QuestionBank implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "题目id")
+    @ApiModelProperty(value = "题库id")
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     @ApiModelProperty(value = "标题")
     private String title;
 
-    @ApiModelProperty(value = "内容")
-    private String content;
+    @ApiModelProperty(value = "描述")
+    private String description;
 
-    @ApiModelProperty(value = "标签列表（json 数组）")
-    private String tags;
-
-    @ApiModelProperty(value = "推荐答案")
-    private String answer;
+    @ApiModelProperty(value = "图片")
+    private String picture;
 
     @ApiModelProperty(value = "创建用户 id")
     private Long userId;

@@ -3,7 +3,7 @@ package com.tuku.tukuService.question.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tuku.tukuMapper.QuestionBankQuestionMapper;
-import com.tuku.tukuModel.entity.question.bankquestion.QuestionBankQuestion;
+import com.tuku.tukuModel.entity.question.QuestionBankQuestion;
 import com.tuku.tukuService.question.IQuestionBankQuestionService;
 import org.springframework.stereotype.Service;
 

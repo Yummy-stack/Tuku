@@ -12,13 +12,16 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @EnableAspectJAutoProxy(exposeProxy = true)
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.tuku","com.qcloud"})
+@ComponentScan(basePackages = {"com.tuku", "com.qcloud"})
 @MapperScan("com.tuku.tukuMapper")
 public class TukuWebApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(TukuWebApplication.class, args);
-        System.out.println("\n ----------------------------- Tuku项目启动成功 ----------------------------- \n");
+        System.out.println("\n=============================================\n");
+        System.out.println("Tuku Web项目,启动成功！");
+        System.out.println("api文档地址为：http://localhost:8080/api/doc.html#/home");
+        System.out.println("\n=============================================\n");
     }
 
 }

@@ -33,3 +33,6 @@ build/
 ### VS Code ###
 .vscode/
 /TuKuFrontend/.vite/
+
+### yml ###
+/tuku-web/src/main/resources/application-local-two.yml

@@ -56,5 +56,5 @@ public interface IUserService extends IService<User> {
     boolean userSignsIn(Long userId);
 
     //用户查看签到表
-    Map<LocalDate,Boolean> allUserSignIn(AllUserSignInDto allUserSignInDto);
+    Map<LocalDate, Boolean> allUserSignIn(AllUserSignInDto allUserSignInDto);
 }
