@@ -16,7 +16,6 @@ public class QuePageBankVo implements Serializable {
     private static final long serialVersionUID = 4551250049069759155L;
 
     @ApiModelProperty(value = "题库id")
-    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     @ApiModelProperty(value = "标题")

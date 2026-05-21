@@ -16,7 +16,6 @@ public class QuePageVo implements Serializable {
     private static final long serialVersionUID = -1270899731330376210L;
 
     @ApiModelProperty(value = "题目id")
-    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     @ApiModelProperty(value = "标题")

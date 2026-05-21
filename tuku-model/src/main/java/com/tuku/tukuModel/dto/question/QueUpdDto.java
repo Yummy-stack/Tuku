@@ -16,7 +16,6 @@ public class QueUpdDto implements Serializable {
     private static final long serialVersionUID = -2790538666780950458L;
 
     @ApiModelProperty(value = "题目id")
-    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     @ApiModelProperty(value = "标题")

@@ -22,7 +22,6 @@ public class QBankDetailVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "题库id")
-    @TableId(value = "id", type = IdType.AUTO)
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 

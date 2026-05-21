@@ -19,7 +19,6 @@ public class QBankUpdDto extends PageQueryCondition implements Serializable {
     private static final long serialVersionUID = -6676023489027783266L;
 
     @ApiModelProperty(value = "题库id")
-    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     @ApiModelProperty(value = "标题")
