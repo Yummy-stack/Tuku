@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
@@ -13,6 +14,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableAspectJAutoProxy(exposeProxy = true)
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.tuku", "com.qcloud"})
+@EnableElasticsearchRepositories(basePackages = {"com.tuku.es.repository"})
 @MapperScan("com.tuku.tukuMapper")
 public class TukuWebApplication {
 

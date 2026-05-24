@@ -101,11 +101,11 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture> impl
     @Resource
     private CacheManager cacheManager;
 
-//    @Resource
-//    private PictureEsRepository pictureEsRepository;
-//
-//    @Resource
-//    private ElasticsearchRestTemplate elasticsearchRestTemplate;
+    @Resource
+    private PictureEsRepository pictureEsRepository;
+
+    @Resource
+    private ElasticsearchRestTemplate elasticsearchRestTemplate;
 
     public static final Cache<Object, Object> pictureCache = Caffeine.newBuilder()
             .maximumSize(1000)
@@ -596,92 +596,92 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture> impl
 
     @Override
     public Page<PictureVO> searchFromEs(PictureQueryRequest pictureQueryRequest) {
-//        ThrowUtils.throwIf(pictureQueryRequest == null, ErrorCode.PARAMS_ERROR);
-//        Long id = pictureQueryRequest.getId();
-//        String name = pictureQueryRequest.getName();
-//        String introduction = pictureQueryRequest.getIntroduction();
-//        String category = pictureQueryRequest.getCategory();
-//        List<String> tags = pictureQueryRequest.getTags();
-//        String searchText = pictureQueryRequest.getSearchText();
-//        Long userId = pictureQueryRequest.getUserId();
-//        Date startEditTime = pictureQueryRequest.getStartEditTime();
-//        Date endEditTime = pictureQueryRequest.getEndEditTime();
-//        int current = pictureQueryRequest.getPageNum();
-//        int pageSize = pictureQueryRequest.getPageSize();
-//        String sortField = pictureQueryRequest.getSortField();
-//        String sortOrder = pictureQueryRequest.getSortOrder();
-//
-//        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-//        // 过滤
-//        boolQueryBuilder.filter(QueryBuilders.termQuery("isDelete", 0));
-//        if (id != null) {
-//            boolQueryBuilder.filter(QueryBuilders.termQuery("id", id));
-//        }
-//        if (userId != null) {
-//            boolQueryBuilder.filter(QueryBuilders.termQuery("createUser", userId));
-//        }
-//        if (StrUtil.isNotBlank(category)) {
-//            boolQueryBuilder.filter(QueryBuilders.termQuery("picCategory", category));
-//        }
-//        if (CollUtil.isNotEmpty(tags)) {
-//            for (String tag : tags) {
-//                boolQueryBuilder.filter(QueryBuilders.termQuery("picTags", tag));
-//            }
-//        }
-//        if (startEditTime != null) {
-//            boolQueryBuilder.filter(QueryBuilders.rangeQuery("editTime").gt(startEditTime.getTime()));
-//        }
-//        if (endEditTime != null) {
-//            boolQueryBuilder.filter(QueryBuilders.rangeQuery("editTime").lt(endEditTime.getTime()));
-//        }
-//        // 审核状态必须为通过
-//        boolQueryBuilder.filter(QueryBuilders.termQuery("reviewStatus", 1));
-//
-//        // 搜索
-//        if (StrUtil.isNotBlank(searchText)) {
-//            boolQueryBuilder.should(QueryBuilders.matchQuery("picName", searchText));
-//            boolQueryBuilder.should(QueryBuilders.matchQuery("picIntroduction", searchText));
-//            boolQueryBuilder.minimumShouldMatch(1);
-//        }
-//        if (StrUtil.isNotBlank(name)) {
-//            boolQueryBuilder.should(QueryBuilders.matchQuery("picName", name));
-//            boolQueryBuilder.minimumShouldMatch(1);
-//        }
-//        if (StrUtil.isNotBlank(introduction)) {
-//            boolQueryBuilder.should(QueryBuilders.matchQuery("picIntroduction", introduction));
-//            boolQueryBuilder.minimumShouldMatch(1);
-//        }
-//
-//        // 排序
-//        SortBuilder<?> sortBuilder = SortBuilders.scoreSort();
-//        if (StrUtil.isNotBlank(sortField)) {
-//            sortBuilder = SortBuilders.fieldSort(sortField);
-//            sortBuilder.order("ascend".equals(sortOrder) ? SortOrder.ASC : SortOrder.DESC);
-//        }
-//
-//        // 分页
-//        PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
-//
-//        // 构造查询
-//        NativeSearchQuery searchQuery = new NativeSearchQueryBuilder()
-//                .withQuery(boolQueryBuilder)
-//                .withPageable(pageRequest)
-//                .withSorts(sortBuilder)
-//                .build();
-//
-//        SearchHits<PictureEsDTO> searchHits = elasticsearchRestTemplate.search(searchQuery, PictureEsDTO.class);
-//
-//        Page<PictureVO> page = new Page<>(current, pageSize, searchHits.getTotalHits());
-//        List<PictureVO> resourceList = new ArrayList<>();
-//        if (searchHits.hasSearchHits()) {
-//            List<SearchHit<PictureEsDTO>> searchHitList = searchHits.getSearchHits();
-//            for (SearchHit<PictureEsDTO> searchHit : searchHitList) {
-//                resourceList.add(PictureVO.entityToVo(PictureEsDTO.dtoToObj(searchHit.getContent())));
-//            }
-//        }
-//        page.setRecords(resourceList);
-//        return page;
-        return null;
+        ThrowUtils.throwIf(pictureQueryRequest == null, ErrorCode.PARAMS_ERROR);
+
+        Long id = pictureQueryRequest.getId();
+        String name = pictureQueryRequest.getName();
+        String introduction = pictureQueryRequest.getIntroduction();
+        String category = pictureQueryRequest.getCategory();
+        List<String> tags = pictureQueryRequest.getTags();
+        String searchText = pictureQueryRequest.getSearchText();
+        Long userId = pictureQueryRequest.getUserId();
+        Date startEditTime = pictureQueryRequest.getStartEditTime();
+        Date endEditTime = pictureQueryRequest.getEndEditTime();
+        int current = pictureQueryRequest.getPageNum();
+        int pageSize = pictureQueryRequest.getPageSize();
+        String sortField = pictureQueryRequest.getSortField();
+        String sortOrder = pictureQueryRequest.getSortOrder();
+
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        // 过滤
+        boolQueryBuilder.filter(QueryBuilders.termQuery("isDelete", 0));
+        if (id != null) {
+            boolQueryBuilder.filter(QueryBuilders.termQuery("id", id));
+        }
+        if (userId != null) {
+            boolQueryBuilder.filter(QueryBuilders.termQuery("createUser", userId));
+        }
+        if (StrUtil.isNotBlank(category)) {
+            boolQueryBuilder.filter(QueryBuilders.termQuery("picCategory", category));
+        }
+        if (CollUtil.isNotEmpty(tags)) {
+            for (String tag : tags) {
+                boolQueryBuilder.filter(QueryBuilders.termQuery("picTags", tag));
+            }
+        }
+        if (startEditTime != null) {
+            boolQueryBuilder.filter(QueryBuilders.rangeQuery("editTime").gt(startEditTime.getTime()));
+        }
+        if (endEditTime != null) {
+            boolQueryBuilder.filter(QueryBuilders.rangeQuery("editTime").lt(endEditTime.getTime()));
+        }
+        // 审核状态必须为通过
+        boolQueryBuilder.filter(QueryBuilders.termQuery("reviewStatus", 1));
+
+        // 搜索
+        if (StrUtil.isNotBlank(searchText)) {
+            boolQueryBuilder.should(QueryBuilders.matchQuery("picName", searchText));
+            boolQueryBuilder.should(QueryBuilders.matchQuery("picIntroduction", searchText));
+            boolQueryBuilder.minimumShouldMatch(1);
+        }
+        if (StrUtil.isNotBlank(name)) {
+            boolQueryBuilder.should(QueryBuilders.matchQuery("picName", name));
+            boolQueryBuilder.minimumShouldMatch(1);
+        }
+        if (StrUtil.isNotBlank(introduction)) {
+            boolQueryBuilder.should(QueryBuilders.matchQuery("picIntroduction", introduction));
+            boolQueryBuilder.minimumShouldMatch(1);
+        }
+
+        // 排序
+        SortBuilder<?> sortBuilder = SortBuilders.scoreSort();
+        if (StrUtil.isNotBlank(sortField)) {
+            sortBuilder = SortBuilders.fieldSort(sortField);
+            sortBuilder.order("ascend".equals(sortOrder) ? SortOrder.ASC : SortOrder.DESC);
+        }
+
+        // 分页
+        PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
+
+        // 构造查询
+        NativeSearchQuery searchQuery = new NativeSearchQueryBuilder()
+                .withQuery(boolQueryBuilder)
+                .withPageable(pageRequest)
+                .withSorts(sortBuilder)
+                .build();
+
+        SearchHits<PictureEsDTO> searchHits = elasticsearchRestTemplate.search(searchQuery, PictureEsDTO.class);
+
+        Page<PictureVO> page = new Page<>(current, pageSize, searchHits.getTotalHits());
+        List<PictureVO> resourceList = new ArrayList<>();
+        if (searchHits.hasSearchHits()) {
+            List<SearchHit<PictureEsDTO>> searchHitList = searchHits.getSearchHits();
+            for (SearchHit<PictureEsDTO> searchHit : searchHitList) {
+                resourceList.add(PictureVO.entityToVo(PictureEsDTO.dtoToObj(searchHit.getContent())));
+            }
+        }
+        page.setRecords(resourceList);
+        return page;
     }
 
     @Override

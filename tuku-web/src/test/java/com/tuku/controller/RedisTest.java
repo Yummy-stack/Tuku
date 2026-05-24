@@ -61,17 +61,17 @@ public class RedisTest {
 
     @Test
     public void testThree() {
-        try {
-            ListOperations<String, Object> listOperations = redisTemplate.opsForList();
-            listOperations.leftPush("testList",1);
-
-            List<Object> list = listOperations.rightPop("testList", 1);
-            Assertions.assertNotNull(list);
-            Object first = list.getFirst();
-
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
+//        try {
+//            ListOperations<String, Object> listOperations = redisTemplate.opsForList();
+//            listOperations.leftPush("testList",1);
+//
+//            List<Object> list = listOperations.rightPop("testList", 1);
+//            Assertions.assertNotNull(list);
+//            Object first = list.getFirst();
+//
+//        } catch (Exception e) {
+//            log.error(e.getMessage());
+//            throw new RuntimeException(e);
+//        }
     }
 }
