@@ -1,6 +1,7 @@
 package com.tuku.tukuService.question.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -8,14 +9,18 @@ import com.tuku.tukuMapper.QuestionBankMapper;
 import com.tuku.tukuModel.dto.question.bank.QBankAddDto;
 import com.tuku.tukuModel.dto.question.bank.QBankQueryDto;
 import com.tuku.tukuModel.dto.question.bank.QBankUpdDto;
+import com.tuku.tukuModel.entity.question.Question;
 import com.tuku.tukuModel.entity.question.QuestionBank;
+import com.tuku.tukuModel.entity.question.QuestionBankQuestion;
 import com.tuku.tukuModel.entity.user.User;
 import com.tuku.tukuModel.enums.error.ErrorCode;
 import com.tuku.tukuModel.vo.question.bank.QBankDetailVo;
 import com.tuku.tukuModel.vo.question.bank.QBankPageVo;
 import com.tuku.tukuModel.vo.user.LoginUserVo;
 import com.tuku.tukuService.question.IQuestionBankService;
+import com.tuku.tukuService.question.IQuestionService;
 import com.tuku.tukuService.user.IUserService;
+import com.tuku.tukucommon.exception.BusinessException;
 import com.tuku.tukucommon.utils.ThrowUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,6 +38,9 @@ public class QuestionBankServiceImpl extends ServiceImpl<QuestionBankMapper, Que
 
     @Resource
     private IUserService userService;
+
+    @Resource
+    private IQuestionService questionService;
 
     @Override
     public Page<QBankPageVo> listQuestionBankByPage(QBankQueryDto qBankQueryDto, HttpServletRequest request) {

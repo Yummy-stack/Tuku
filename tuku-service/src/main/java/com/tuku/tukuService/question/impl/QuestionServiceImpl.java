@@ -1,11 +1,11 @@
 package com.tuku.tukuService.question.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.tuku.tukuMapper.QuestionBankQuestionMapper;
 import com.tuku.tukuMapper.QuestionMapper;
 import com.tuku.tukuModel.dto.question.*;
 import com.tuku.tukuModel.entity.question.Question;
@@ -19,6 +19,7 @@ import com.tuku.tukuService.question.IQuestionBankQuestionService;
 import com.tuku.tukuService.question.IQuestionBankService;
 import com.tuku.tukuService.question.IQuestionService;
 import com.tuku.tukuService.user.IUserService;
+import com.tuku.tukucommon.exception.BusinessException;
 import com.tuku.tukucommon.utils.ThrowUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
