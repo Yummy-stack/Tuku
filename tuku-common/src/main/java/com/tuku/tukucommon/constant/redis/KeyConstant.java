@@ -21,4 +21,7 @@ public interface KeyConstant {
 
     // 用户签到表的Key前缀
     String USER_SIGN_IN_KEY = "user:sign-in:";
+
+    // 题目同步到 ES 失败的 ID 集合
+    String QUESTION_SYNC_FAILED_KEY = "tuku:question:sync:failed";
 }
