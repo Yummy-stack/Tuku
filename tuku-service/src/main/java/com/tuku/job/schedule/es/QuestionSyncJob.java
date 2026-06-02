@@ -59,23 +59,26 @@ public class QuestionSyncJob {
             log.info("题目列表为空，无需同步");
             return;
         }
-        if (questionList == null || questionList.isEmpty()) {
-            log.info("题目列表为空，无需同步");
-            return;
-        }
 
-        // 分批同步，避免一次性加载过多数据
-        int batchSize = 500;
-        int size = questionList.size();
+        int pageSize = 500;
+        long lastId = 0L;
+
         AtomicInteger successCount = new AtomicInteger();
         List<CompletableFuture<Void>> taskList = new ArrayList<>();
-        for (int i = 0; i < size; i += batchSize) {
-            int end = Math.min(i + batchSize, size);
-            List<Question> subList = questionList.subList(i, end);
-            // 异步批量同步
+
+        while (true) {
+            List<Question> QueList = questionService.lambdaQuery()
+                    .gt(Question::getId, lastId)
+                    .orderByAsc(Question::getId)
+                    .last("limit" + pageSize)
+                    .list();
+
+            if (QueList == null || QueList.isEmpty()) {
+                break;
+            }
             CompletableFuture<Void> task = CompletableFuture.runAsync(() -> {
                 try {
-                    List<QuestionEsDoc> esDocList = subList.stream()
+                    List<QuestionEsDoc> esDocList = QueList.stream()
                             .map(this::convertToEsDoc)
                             .collect(Collectors.toList());
                     questionEsRepository.saveAll(esDocList);
@@ -83,8 +86,7 @@ public class QuestionSyncJob {
                     successCount.addAndGet(esDocList.size());
                 } catch (Exception e) {
                     log.error("批量同步题目到 ES 失败，记录失败 ID 到 Redis", e);
-                    // 记录失败 ID
-                    Set<String> failedIds = subList.stream()
+                    Set<String> failedIds = QueList.stream()
                             .map(item -> String.valueOf(item.getId()))
                             .collect(Collectors.toSet());
                     stringRedisTemplate.opsForSet().add(KeyConstant.QUESTION_SYNC_FAILED_KEY,
@@ -92,8 +94,8 @@ public class QuestionSyncJob {
                 }
             }, threadPoolExecutor);
             taskList.add(task);
-        }
 
+        }
         CompletableFuture.allOf(taskList.toArray(new CompletableFuture[0])).join();
         log.info("全量同步题目数据任务提交完成，数量：{}", successCount.get());
     }

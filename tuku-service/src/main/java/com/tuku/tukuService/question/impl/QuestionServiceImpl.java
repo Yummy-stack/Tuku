@@ -23,6 +23,7 @@ import com.tuku.tukuService.question.IQuestionService;
 import com.tuku.tukuService.user.IUserService;
 import com.tuku.tukucommon.exception.BusinessException;
 import com.tuku.tukucommon.utils.ThrowUtils;
+import io.qdrant.client.QdrantClient;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
