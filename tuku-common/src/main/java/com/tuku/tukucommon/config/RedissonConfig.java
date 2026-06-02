@@ -1,4 +1,4 @@
-package com.tuku.config;
+package com.tuku.tukucommon.config;
 
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;

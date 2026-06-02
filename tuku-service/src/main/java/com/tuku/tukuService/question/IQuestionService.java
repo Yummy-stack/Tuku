@@ -81,4 +81,9 @@ public interface IQuestionService extends IService<Question> {
      * 通过题目或者题目内容来检索 - 混合检索
      */
     List<Question> queryQueByHybridSearch(QueEsDto queEsDto);
+
+    /**
+     * 通过题目或题目内容来搜索 - 通过ElasticSearch来搜索
+     */
+    List<Question> queryQueByEs(QueEsDto queEsDto);
 }

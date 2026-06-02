@@ -7,7 +7,7 @@ public interface KeyConstant {
     // 获取图片详情
     String PICTURE_DETAIL = "Tuku:pictureVo:one:";
 
-    //Spring-Data-Session
+    // Spring-Data-Session
     String SPRING_SESSION = "spring:session:sessions:f9bc94f1-11d1-4fe7-bac7-20af50b705f0";
 
     // 布隆过滤器名称

@@ -1,4 +1,4 @@
-package com.tuku.config;
+package com.tuku.tukucommon.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

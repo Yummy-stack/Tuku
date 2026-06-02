@@ -1,4 +1,5 @@
-package com.tuku.config;
+package com.tuku.tukucommon.config;
+
 
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.ClientConfig;

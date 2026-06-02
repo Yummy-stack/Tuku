@@ -1,4 +1,4 @@
-package com.tuku.config;
+package com.tuku.tukucommon.config;
 
 import io.qdrant.client.QdrantClient;
 import io.qdrant.client.QdrantGrpcClient;

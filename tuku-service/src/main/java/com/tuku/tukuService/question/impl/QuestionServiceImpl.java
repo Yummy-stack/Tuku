@@ -23,9 +23,6 @@ import com.tuku.tukuService.question.IQuestionService;
 import com.tuku.tukuService.user.IUserService;
 import com.tuku.tukucommon.exception.BusinessException;
 import com.tuku.tukucommon.utils.ThrowUtils;
-import io.qdrant.client.QdrantClient;
-import io.qdrant.client.grpc.Points;
-import io.qdrant.client.grpc.Points.SearchPoints;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -269,6 +266,38 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<Question> queryQueByEs(QueEsDto queEsDto) {
+        if (queEsDto == null) {
+            throw new RuntimeException("参数为空");
+        }
+        String questionSearchText = queEsDto.getQuestionSearchText();
+        if (questionSearchText == null) {
+            throw new RuntimeException("参数为空");
+        }
+
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        boolQueryBuilder.must(QueryBuilders.matchQuery("title", questionSearchText));
+        boolQueryBuilder.must(QueryBuilders.matchQuery("content", questionSearchText));
+
+        NativeSearchQuery nativeSearchQuery = new NativeSearchQueryBuilder()
+                .withQuery(boolQueryBuilder)
+                .withPageable(PageRequest.of(0, 10))
+                .build();
+
+        SearchHits<QuestionEsDoc> searchHits = elasticsearchRestTemplate.search(nativeSearchQuery, QuestionEsDoc.class);
+        List<SearchHit<QuestionEsDoc>> searchHitsSearchHits = searchHits.getSearchHits();
+        List<Question> questionList = new ArrayList<>();
+        if (!CollUtil.isEmpty(searchHitsSearchHits)) {
+            questionList = searchHitsSearchHits.stream()
+                    .map(SearchHit::getContent)
+                    .map(this::QueEsDocToQue)
+                    .toList();
+        }
+
+        return questionList;
+    }
+
     /**
      * 从 Elasticsearch 检索 ID 列表
      */
@@ -372,6 +401,14 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         questionBankQuestion.setCreateTime(new Date());
         questionBankQuestion.setUpdateTime(new Date());
         return questionBankQuestion;
+    }
+
+    private Question QueEsDocToQue(QuestionEsDoc questionEsDoc) {
+        Question question = new Question();
+        question.setId(questionEsDoc.getId());
+        question.setTitle(questionEsDoc.getTitle());
+        question.setContent(questionEsDoc.getContent());
+        return question;
     }
 
     private List<Question> queryEsByQueEsDto(QueQueryDto queQueryDto) {
