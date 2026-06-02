@@ -2,6 +2,7 @@ package com.tuku.tukuService.question;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.tuku.es.query.QueEsDto;
 import com.tuku.tukuModel.dto.question.*;
 import com.tuku.tukuModel.entity.question.Question;
 import com.tuku.tukuModel.entity.user.User;
@@ -75,4 +76,9 @@ public interface IQuestionService extends IService<Question> {
      * @return 是否成功
      */
     boolean updateQuestionBank(QueUpdateBankDto queUpdateBankDto, HttpServletRequest request);
+
+    /**
+     * 通过题目或者题目内容来检索 - 混合检索
+     */
+    List<Question> queryQueByHybridSearch(QueEsDto queEsDto);
 }

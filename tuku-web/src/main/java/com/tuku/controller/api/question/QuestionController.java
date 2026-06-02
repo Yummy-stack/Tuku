@@ -1,6 +1,7 @@
 package com.tuku.controller.api.question;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.tuku.es.query.QueEsDto;
 import com.tuku.tukuModel.dto.question.*;
 import com.tuku.tukuModel.entity.question.Question;
 import com.tuku.tukuModel.enums.error.ErrorCode;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 import static com.tuku.tukucommon.constant.user.UserRoleConstant.ADMIN_ROLE;
 
@@ -28,6 +30,14 @@ public class QuestionController {
 
     @Resource
     private IQuestionService questionService;
+
+    @ApiOperation(value = "混合检索题目")
+    @PostMapping(value = "/search/hybrid")
+    BaseResponse<List<Question>> queryQueByHybridSearch(@RequestBody QueEsDto queEsDto, HttpServletRequest request) {
+        ThrowUtils.throwIf(queEsDto == null, ErrorCode.PARAMS_ERROR, "参数为空");
+        List<Question> result = questionService.queryQueByHybridSearch(queEsDto);
+        return ResultUtils.success(result);
+    }
 
     @ApiOperation(value = "分页获取题目列表")
     @PostMapping(value = "/page")

@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 @Configuration
 @EnableAsync
-public class ThreadPoolConfig {
+public class ThreadPoolServerConfig {
 
     @Bean(name = "syncThreadPoolExecutor")
     public ThreadPoolExecutor syncThreadPoolExecutor() {

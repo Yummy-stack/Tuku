@@ -16,6 +16,7 @@ import com.tuku.tukuService.question.IQuestionService;
 import com.tuku.tukucommon.exception.BusinessException;
 import com.tuku.tukucommon.utils.ThrowUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
@@ -31,9 +32,11 @@ import java.util.stream.Collectors;
 @Slf4j
 public class QuestionBankQuestionServiceImpl extends ServiceImpl<QuestionBankQuestionMapper, QuestionBankQuestion> implements IQuestionBankQuestionService {
     @Resource
+    @Lazy
     private IQuestionService questionService;
 
     @Resource
+    @Lazy
     private IQuestionBankService questionBankService;
 
     @Resource

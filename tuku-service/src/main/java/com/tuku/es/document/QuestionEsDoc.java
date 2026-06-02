@@ -7,13 +7,14 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
 @Document(indexName = "question")
 @Data
 public class QuestionEsDoc implements Serializable {
-
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -39,7 +40,4 @@ public class QuestionEsDoc implements Serializable {
 
     @Field(type = FieldType.Date, format = DateFormat.custom, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
-
-    @Field(type = FieldType.Integer)
-    private Integer isDelete;
 }
