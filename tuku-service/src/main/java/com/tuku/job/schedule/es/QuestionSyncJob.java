@@ -8,6 +8,7 @@ import com.tuku.es.repository.QuestionEsRepository;
 import com.tuku.tukuModel.entity.question.Question;
 import com.tuku.tukuService.question.IQuestionService;
 import com.tuku.tukucommon.constant.redis.KeyConstant;
+import com.xxl.job.core.context.XxlJobHelper;
 import com.xxl.job.core.handler.annotation.XxlJob;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -39,7 +40,7 @@ public class QuestionSyncJob {
     private QuestionEsRepository questionEsRepository;
 
     @Resource(name = "syncThreadPoolExecutor")
-    private ThreadPoolExecutor threadPoolExecutor;
+    private ThreadPoolExecutor syncThreadPoolExecutor;
 
     @Resource
     private StringRedisTemplate stringRedisTemplate;
@@ -47,12 +48,11 @@ public class QuestionSyncJob {
     /**
      * 全量同步题目数据到 ES
      */
-//    @XxlJob("fullSyncQuestionToEs")
-    @Scheduled(cron = "0 0 0 * * *")
+    @XxlJob("fullSyncQuestionToEs")
     public void fullSyncQuestionToEs() {
         log.info("开始全量同步题目数据到 ES");
-        // 获取所有题目
-        List<Question> questionList = questionService.list();
+        XxlJobHelper.log("开始全量同步题目数据到 ES");
+
         Long questionAllCount = questionService.lambdaQuery()
                 .count();
         if (questionAllCount == 0) {
@@ -76,6 +76,8 @@ public class QuestionSyncJob {
             if (QueList == null || QueList.isEmpty()) {
                 break;
             }
+            lastId = QueList.get(QueList.size() - 1).getId();
+
             CompletableFuture<Void> task = CompletableFuture.runAsync(() -> {
                 try {
                     List<QuestionEsDoc> esDocList = QueList.stream()
@@ -83,28 +85,32 @@ public class QuestionSyncJob {
                             .collect(Collectors.toList());
                     questionEsRepository.saveAll(esDocList);
                     log.info("批量同步题目到 ES 成功，数量：{}", esDocList.size());
+                    XxlJobHelper.log("批量同步题目到 ES 成功，数量：{}", esDocList.size());
                     successCount.addAndGet(esDocList.size());
                 } catch (Exception e) {
                     log.error("批量同步题目到 ES 失败，记录失败 ID 到 Redis", e);
+                    XxlJobHelper.log("批量同步题目到 ES 失败，记录失败 ID 到 Redis", e);
                     Set<String> failedIds = QueList.stream()
                             .map(item -> String.valueOf(item.getId()))
                             .collect(Collectors.toSet());
                     stringRedisTemplate.opsForSet().add(KeyConstant.QUESTION_SYNC_FAILED_KEY,
                             failedIds.toArray(new String[0]));
                 }
-            }, threadPoolExecutor);
+            }, syncThreadPoolExecutor);
+
             taskList.add(task);
 
         }
         CompletableFuture.allOf(taskList.toArray(new CompletableFuture[0])).join();
+
         log.info("全量同步题目数据任务提交完成，数量：{}", successCount.get());
+        XxlJobHelper.log("全量同步题目数据任务提交完成，数量：{}", successCount.get());
     }
 
     /**
      * 增量同步题目数据到 ES（每 5 分钟同步一次）
      */
 
-    @Scheduled(cron = "0 */5 * * * *")
     @XxlJob("incSyncQuestionToEs")
     public void incSyncQuestionToEs() {
         log.info("开始增量同步题目数据到 ES");
@@ -135,14 +141,13 @@ public class QuestionSyncJob {
                 stringRedisTemplate.opsForSet().add(KeyConstant.QUESTION_SYNC_FAILED_KEY,
                         failedIds.toArray(new String[0]));
             }
-        }, threadPoolExecutor);
+        }, syncThreadPoolExecutor);
     }
 
     /**
      * 补偿同步：定时从 Redis 读取失败的 ID 并重试
      */
-//    @XxlJob("compensateSyncQuestionToEs")
-    @Scheduled(cron = "0 0 0 * * *")
+    @XxlJob("compensateSyncQuestionToEs")
     public void compensateSyncQuestionToEs() {
         log.info("开始执行题目同步补偿任务");
         // 从 Redis 获取所有失败的 ID

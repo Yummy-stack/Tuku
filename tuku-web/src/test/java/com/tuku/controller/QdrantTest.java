@@ -16,6 +16,6 @@ public class QdrantTest {
 
     @Test
     void test1() {
-    
+
     }
 }
